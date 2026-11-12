@@ -499,32 +499,36 @@
                                 <span class="text-xs sm:text-sm font-extrabold text-cyan-300">🧼 Сервисное и Техническое Обслуживание (Бытовые • Полупром • VRF)</span>
                                 <button onclick="toggleToSelectorPanel()" class="text-slate-300 hover:text-white font-bold px-2">✕</button>
                             </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
-                                <div class="sm:col-span-2">
+                            <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+                                <div class="sm:col-span-5">
                                     <label class="block text-xs font-semibold text-cyan-100 mb-1">Выберите тип системы:</label>
-                                    <select id="toModelSelect" class="pro-input w-full rounded-xl px-3 py-2.5 text-xs sm:text-sm font-semibold">
+                                    <select id="toModelSelect" onchange="syncToPriceInput()" class="pro-input w-full rounded-xl px-3 py-2.5 text-xs sm:text-sm font-semibold">
                                         <optgroup label="🏠 Бытовые сплит-системы (комплекс: вн. + нар. блок)">
-                                            <option value="w_to_wall_07_12">Настенный сплит 07–12 BTU (вн.+нар.) — 3 000 ₽</option>
-                                            <option value="w_to_wall_18_24">Настенный сплит 18–24 BTU (вн.+нар.) — 3 500 ₽</option>
-                                            <option value="w_to_wall_30_36">Настенный сплит 30–36 BTU (вн.+нар.) — 4 000 ₽</option>
+                                            <option value="w_to_wall_07_12">Настенный сплит 07–12 BTU (вн.+нар.)</option>
+                                            <option value="w_to_wall_18_24">Настенный сплит 18–24 BTU (вн.+нар.)</option>
+                                            <option value="w_to_wall_30_36">Настенный сплит 30–36 BTU (вн.+нар.)</option>
                                         </optgroup>
                                         <optgroup label="🏢 Полупромышленные (комплекс: вн. + нар. блок)">
-                                            <option value="w_to_cass_18_36">Кассетный / Канальный / Потолочный 18–36 — 4 500 ₽</option>
-                                            <option value="w_to_cass_48_60">Кассетный / Канальный / Потолочный 48–60 — 5 500 ₽</option>
-                                            <option value="w_to_column">Колонный кондиционер (вн.+нар.) — 5 000 ₽</option>
+                                            <option value="w_to_cass_18_36">Кассетный / Канальный / Потолочный 18–36</option>
+                                            <option value="w_to_cass_48_60">Кассетный / Канальный / Потолочный 48–60</option>
+                                            <option value="w_to_column">Колонный кондиционер (вн.+нар.)</option>
                                         </optgroup>
                                         <optgroup label="🏭 Промышленные системы (VRF / VRV / ККБ — поблочно)">
-                                            <option value="w_to_vrf_in">Внутренний блок VRF / VRV системы — 3 500 ₽</option>
-                                            <option value="w_to_vrf_out">Наружный блок VRF / ККБ / Чиллер — 8 500 ₽</option>
-                                            <option value="w_to_ind_roof">Руфтоп / Прецизионный кондиционер — 9 000 ₽</option>
+                                            <option value="w_to_vrf_in">Внутренний блок VRF / VRV системы</option>
+                                            <option value="w_to_vrf_out">Наружный блок VRF / ККБ / Чиллер</option>
+                                            <option value="w_to_ind_roof">Руфтоп / Прецизионный кондиционер</option>
                                         </optgroup>
                                     </select>
                                 </div>
-                                <div>
+                                <div class="sm:col-span-2">
+                                    <label class="block text-xs font-semibold text-emerald-300 mb-1">Цена за 1 ед., ₽:</label>
+                                    <input type="number" id="toCustomPriceInput" step="50" min="0" class="pro-input w-full rounded-xl px-3 py-2.5 text-sm font-bold text-center border-emerald-500/70 text-emerald-300 focus:border-emerald-400" title="Вы можете изменить цену за 1 ТО прямо здесь перед добавлением">
+                                </div>
+                                <div class="sm:col-span-2">
                                     <label class="block text-xs font-semibold text-cyan-100 mb-1">Количество:</label>
                                     <input type="number" id="toCountInput" value="1" min="1" step="1" class="pro-input w-full rounded-xl px-3 py-2.5 text-sm font-bold text-center">
                                 </div>
-                                <div class="flex gap-1.5">
+                                <div class="sm:col-span-3 flex gap-1.5">
                                     <button onclick="applyToService(false)" class="flex-1 bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-extrabold text-xs py-2.5 px-3 rounded-xl transition shadow">
                                         Заполнить ТО
                                     </button>
@@ -2022,15 +2026,32 @@
         function toggleToSelectorPanel() {
             const p = document.getElementById('toSelectorPanel');
             p.classList.toggle('hidden');
+            if (!p.classList.contains('hidden')) {
+                syncToPriceInput();
+            }
+        }
+
+        function syncToPriceInput() {
+            const select = document.getElementById('toModelSelect');
+            const priceInp = document.getElementById('toCustomPriceInput');
+            if (!select || !priceInp) return;
+            const it = items.find(x => x.id === select.value);
+            if (it) {
+                priceInp.value = it.retail || 0;
+            }
         }
 
         function applyToService(addMode = false) {
             const toId = document.getElementById('toModelSelect').value;
             const count = Math.max(1, parseFloat(document.getElementById('toCountInput').value) || 1);
+            const customPrice = parseFloat(document.getElementById('toCustomPriceInput').value);
             if (!addMode) items.forEach(i => i.qty = 0);
             const it = items.find(x => x.id === toId);
             if (it) {
                 it.qty = addMode ? (it.qty + count) : count;
+                if (!isNaN(customPrice) && customPrice >= 0) {
+                    it.retail = customPrice;
+                }
             }
             const u = units[activeUnitIndex];
             if (u && !addMode && u.title.startsWith('Кондиционер')) {
@@ -2038,7 +2059,7 @@
             }
             saveState();
             renderAll();
-            showToast(addMode ? `Добавлено: ${it ? it.name : 'ТО'} (${count})` : `Заполнен расчёт ТО!`);
+            showToast(addMode ? `Добавлено: ${it ? it.name : 'ТО'} (${count} ед. по ${it ? it.retail : 0} ₽)` : `Заполнен расчёт ТО (${it ? it.retail : 0} ₽)!`);
         }
 
         function renderAll() {
