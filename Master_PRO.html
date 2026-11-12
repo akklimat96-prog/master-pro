@@ -2284,20 +2284,48 @@
         }
 
         function getHvacWatermarkBgUrl() {
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" fill="none">
-                <g opacity="0.055" stroke="#0284c7" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M56 26v40M38.7 36l34.6 20M73.3 36L38.7 56"/>
-                    <path d="M51 31l5 5 5-5M51 61l5-5 5 5M41 42l5-2-1-5M67 52l-1-5 5-2M67 40l-1 5 5 2M41 50l5 2-1 5"/>
-                    <rect x="136" y="34" width="76" height="28" rx="7"/>
-                    <line x1="146" y1="53" x2="202" y2="53"/>
-                    <path d="M150 68c0 5-4 5-4 10M168 68c0 5-4 5-4 10M186 68c0 5-4 5-4 10"/>
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320" fill="none">
+                <defs>
+                    <linearGradient id="wm_grad_cyan" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#0284c7" stop-opacity="0.14"/>
+                        <stop offset="100%" stop-color="#0369a1" stop-opacity="0.08"/>
+                    </linearGradient>
+                    <linearGradient id="wm_grad_emerald" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#059669" stop-opacity="0.13"/>
+                        <stop offset="100%" stop-color="#047857" stop-opacity="0.07"/>
+                    </linearGradient>
+                </defs>
+                <!-- Верхняя левая группа: Снежинка + лучи -->
+                <g stroke="url(#wm_grad_cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M64 26v48M43 38l42 24M85 38L43 62"/>
+                    <path d="M58 32l6 6 6-6M58 68l6-6 6 6M47 44l6-2-1-6M79 56l-1-6 6-2M79 44l-1 6 6 2M47 56l6 2-1 6"/>
+                    <circle cx="64" cy="50" r="4" fill="none" stroke="url(#wm_grad_cyan)" stroke-width="1.8"/>
                 </g>
-                <g opacity="0.045" stroke="#059669" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M180 144v44M161 155l38 22M199 155l-38 22"/>
-                    <path d="M175 149l5 5 5-5M175 183l5-5 5 5"/>
-                    <rect x="28" y="148" width="76" height="28" rx="7"/>
-                    <line x1="38" y1="167" x2="94" y2="167"/>
-                    <path d="M44 182c0 5-4 5-4 10M64 182c0 5-4 5-4 10M84 182c0 5-4 5-4 10"/>
+                <!-- Верхний правый сплит-блок с потоком воздуха и 18°C -->
+                <g stroke="url(#wm_grad_cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="180" y="34" width="96" height="34" rx="8" fill="none"/>
+                    <line x1="192" y1="56" x2="264" y2="56" stroke-width="1.6"/>
+                    <circle cx="260" cy="44" r="2.4" fill="#0284c7" fill-opacity="0.2"/>
+                    <path d="M198 74c0 6-5 6-5 13M220 74c0 6-5 6-5 13M242 74c0 6-5 6-5 13" stroke-width="1.8"/>
+                    <text x="202" y="48" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#0284c7" fill-opacity="0.16" stroke="none">18°C</text>
+                </g>
+                <!-- Нижняя левая сплит-система с жалюзи -->
+                <g stroke="url(#wm_grad_emerald)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="36" y="196" width="96" height="34" rx="8" fill="none"/>
+                    <line x1="48" y1="218" x2="120" y2="218" stroke-width="1.6"/>
+                    <circle cx="116" cy="206" r="2.4" fill="#059669" fill-opacity="0.2"/>
+                    <path d="M54 236c0 6-5 6-5 13M76 236c0 6-5 6-5 13M98 236c0 6-5 6-5 13" stroke-width="1.8"/>
+                    <text x="58" y="210" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#059669" fill-opacity="0.16" stroke="none">COOL</text>
+                </g>
+                <!-- Нижняя правая изумрудная снежинка с кристаллами -->
+                <g stroke="url(#wm_grad_emerald)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M228 188v52M205 201l46 26M251 201l-46 26"/>
+                    <path d="M221 195l7 7 7-7M221 233l7-7 7 7"/>
+                    <circle cx="228" cy="214" r="4.5" fill="none" stroke="url(#wm_grad_emerald)" stroke-width="1.8"/>
+                </g>
+                <!-- Диагональная лёгкая печать качества по центру: MASTER PRO • HVAC -->
+                <g transform="rotate(-25 160 160)" stroke="none">
+                    <text x="160" y="166" text-anchor="middle" font-family="'Inter', Arial, sans-serif" font-size="14" font-weight="900" letter-spacing="4" fill="#0f172a" fill-opacity="0.045">MASTER PRO • КЛИМАТ</text>
                 </g>
             </svg>`;
             return `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}")`;
@@ -2636,22 +2664,55 @@
         }
 
         function drawHvacPageTheme(ctx, W, H) {
-            // Деликатная рамка страницы
+            // Элегантная двойная рамка страницы с изумрудно-голубыми уголками
             ctx.save();
             ctx.strokeStyle = '#e2e8f0';
             ctx.lineWidth = 2;
             ctx.strokeRect(32, 32, W - 64, H - 64);
+            ctx.strokeStyle = '#f1f5f9';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(40, 40, W - 80, H - 80);
+
+            // Фирменные угловые климатические маркеры
+            const cornerLen = 28;
+            ctx.strokeStyle = '#0284c7';
+            ctx.lineWidth = 3;
+            // Верхний левый угол
+            ctx.beginPath();
+            ctx.moveTo(32, 32 + cornerLen); ctx.lineTo(32, 32); ctx.lineTo(32 + cornerLen, 32);
+            ctx.stroke();
+            // Нижний правый угол
+            ctx.strokeStyle = '#059669';
+            ctx.beginPath();
+            ctx.moveTo(W - 32, H - 32 - cornerLen); ctx.lineTo(W - 32, H - 32); ctx.lineTo(W - 32 - cornerLen, H - 32);
+            ctx.stroke();
             ctx.restore();
 
-            // Сверхлёгкий водяной знак HVAC (снежинки + сплит-системы), не мешает чтению
-            drawSnowflakeCanvas(ctx, 130, 140, 58, '#0284c7', 0.055, 3);
-            drawSnowflakeCanvas(ctx, W - 130, 145, 52, '#059669', 0.055, 3);
-            drawAcUnitCanvas(ctx, W - 260, H - 185, 165, 58, '#0284c7', 0.055, 3.5, true);
-            drawSnowflakeCanvas(ctx, 135, H - 155, 56, '#059669', 0.055, 3);
+            // Водяные знаки по краям страницы (комбинация снежинок и сплит-систем)
+            drawSnowflakeCanvas(ctx, 130, 140, 64, '#0284c7', 0.08, 3.2);
+            drawSnowflakeCanvas(ctx, W - 130, 145, 58, '#059669', 0.08, 3.2);
+            drawAcUnitCanvas(ctx, W - 270, H - 185, 175, 62, '#0284c7', 0.085, 3.5, true);
+            drawSnowflakeCanvas(ctx, 135, H - 155, 62, '#059669', 0.08, 3.2);
 
-            // Центральный крупный водяной знак снежинки и кондиционера
-            drawSnowflakeCanvas(ctx, W / 2, H / 2 - 40, 240, '#0284c7', 0.035, 6);
-            drawAcUnitCanvas(ctx, W / 2 - 140, H / 2 + 230, 280, 96, '#059669', 0.032, 5, true);
+            // Симметричные промежуточные водяные знаки по бокам
+            drawSnowflakeCanvas(ctx, 75, H / 2, 44, '#0284c7', 0.05, 2.5);
+            drawAcUnitCanvas(ctx, W - 180, H / 2 - 25, 120, 44, '#059669', 0.05, 2.5, true);
+
+            // Крупный центральный климатический водяной герб (лёгкий фоновый слой под таблицами)
+            drawSnowflakeCanvas(ctx, W / 2, H / 2 - 80, 260, '#0284c7', 0.052, 6.5);
+            drawAcUnitCanvas(ctx, W / 2 - 160, H / 2 + 200, 320, 108, '#059669', 0.048, 5.5, true);
+
+            // Полупрозрачная диагональная защитная надпись по центру страницы
+            ctx.save();
+            ctx.translate(W / 2, H / 2 + 60);
+            ctx.rotate(-Math.PI / 6);
+            ctx.fillStyle = '#0f172a';
+            ctx.globalAlpha = 0.028;
+            ctx.font = '900 64px Inter, Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('ИНЖЕНЕРНЫЙ КЛИМАТ • СМЕТА', 0, 0);
+            ctx.restore();
         }
 
         function createPdfPageCanvas() {
